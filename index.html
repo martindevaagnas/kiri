@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Authentication Example</title>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="530312392972-h70v7jp6rte9c6v8odlnv51f8tsu2bku.apps.googleusercontent.com">
+</head>
+<body>
+    <div id="g-signin2" data-onsuccess="onSignIn"></div>
+    <button id="signOutButton" style="display: none;">Sign Out</button>
+    <div id="userInfo" style="display: none;"></div>
+
+    <script>
+        function onSignIn(googleUser) {
+            const profile = googleUser.getBasicProfile();
+            const idToken = googleUser.getAuthResponse().id_token;
+
+            const signOutButton = document.getElementById('signOutButton');
+            const userInfoDiv = document.getElementById('userInfo');
+
+            signOutButton.style.display = 'block';
+            userInfoDiv.style.display = 'block';
+            userInfoDiv.innerHTML = `Logged in as: ${profile.getEmail()}`;
+
+            signOutButton.addEventListener('click', function () {
+                const auth2 = gapi.auth2.getAuthInstance();
+                auth2.signOut().then(function () { 
+                    signOutButton.style.display = 'none';
+                    userInfoDiv.style.display = 'none';
+                });
+            });
+
+            // You can use the idToken to authenticate on your server
+            // Send the idToken to your server using an AJAX request
+            // Example:
+            // $.ajax({
+            //     url: 'your_server_endpoint',
+            //     method: 'POST',
+            //     data: { idToken: idToken },
+            //     success: function(response) {
+            //         console.log('Server response:', response);
+            //     },
+            //     error: function(error) {
+            //         console.error('Error:', error);
+            //     }
+            // });
+        }
+    </script>
+</body>
+</html>
